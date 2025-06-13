@@ -1,4 +1,4 @@
-package dev.lycosp.jqlite.query.builder;
+package dev.lycosp.xqlite.query.builder;
 
 import java.util.Objects;
 

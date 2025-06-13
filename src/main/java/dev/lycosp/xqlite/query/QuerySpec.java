@@ -1,4 +1,4 @@
-package dev.lycosp.jqlite.query;
+package dev.lycosp.xqlite.query;
 
 import java.util.Collections;
 import java.util.List;

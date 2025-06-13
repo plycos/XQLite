@@ -1,6 +1,6 @@
-package dev.lycosp.jqlite.query.builder;
+package dev.lycosp.xqlite.query.builder;
 
-import dev.lycosp.jqlite.query.QuerySpec;
+import dev.lycosp.xqlite.query.QuerySpec;
 
 import java.util.ArrayList;
 import java.util.Arrays;
