@@ -53,9 +53,10 @@ public final class QuerySpec {
     /**
      * Creates a {@code QuerySpec} for a SQL statement with no parameters.
      *
-     * @param sql the SQL statement (must not be {@code null})
+     * @param sql the SQL statement (must not be {@code null}, empty, or whitespace only)
      * @return a new {@code QuerySpec} instance
-     * @throws NullPointerException if {@code sql} is {@code null}
+     * @throws NullPointerException     if {@code sql} is {@code null}
+     * @throws IllegalArgumentException if {@code sql} is empty or whitespace only
      */
     public static QuerySpec of(String sql) {
         return new QuerySpec(sql, Collections.emptyList());
@@ -67,10 +68,11 @@ public final class QuerySpec {
      * This overload is convenient for Java 8 users, allowing parameters to be specified directly.
      * </p>
      *
-     * @param sql    the SQL statement (must not be {@code null})
+     * @param sql    the SQL statement (must not be {@code null}, empty, or whitespace only)
      * @param params the parameters to bind (must not be {@code null}, may be empty)
      * @return a new {@code QuerySpec} instance
-     * @throws NullPointerException if {@code sql} or {@code params} is {@code null}
+     * @throws NullPointerException     if {@code sql} or {@code params} is {@code null}
+     * @throws IllegalArgumentException if {@code sql} is empty or whitespace only
      */
     public static QuerySpec of(String sql, Object... params) {
         return new QuerySpec(sql, Arrays.asList(params));
@@ -79,10 +81,11 @@ public final class QuerySpec {
     /**
      * Creates a {@code QuerySpec} for a SQL statement with the given parameter list.
      *
-     * @param sql    the SQL statement (must not be {@code null})
+     * @param sql    the SQL statement (must not be {@code null}, empty, or whitespace only)
      * @param params the parameters to bind (must not be {@code null})
      * @return a new {@code QuerySpec} instance
-     * @throws NullPointerException if {@code sql} or {@code params} is {@code null}
+     * @throws NullPointerException     if {@code sql} or {@code params} is {@code null}
+     * @throws IllegalArgumentException if {@code sql} is empty or whitespace only
      */
     public static QuerySpec of(String sql, List<Object> params) {
         return new QuerySpec(sql, params);
@@ -91,12 +94,16 @@ public final class QuerySpec {
     /**
      * Constructs a new {@code QuerySpec}.
      *
-     * @param sql    the SQL statement (must not be {@code null})
+     * @param sql    the SQL statement (must not be {@code null}, empty, or whitespace only)
      * @param params the parameters to bind (must not be {@code null})
-     * @throws NullPointerException if {@code sql} or {@code params} is {@code null}
+     * @throws NullPointerException     if {@code sql} or {@code params} is {@code null}
+     * @throws IllegalArgumentException if {@code sql} is empty or whitespace only
      */
     private QuerySpec(String sql, List<Object> params) {
         this.sql = Objects.requireNonNull(sql, "sql must not be null");
+        if (sql.trim().isEmpty()) {
+            throw new IllegalArgumentException("SQL must not be empty or whitespace only");
+        }
         this.params = Collections.unmodifiableList(new ArrayList<>(Objects.requireNonNull(params, "params must not be null")));
         int placeholderCount = countSqlPlaceholders(this.sql);
         if (placeholderCount != this.params.size()) {
