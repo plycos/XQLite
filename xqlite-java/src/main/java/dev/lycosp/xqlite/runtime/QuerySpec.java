@@ -109,7 +109,7 @@ public final class QuerySpec {
      */
     private QuerySpec(String sql, List<Object> params) {
         this.sql = StringUtils.requireNonBlank(sql, "SQL must not be blank, but got \"" + sql + "\"");
-        this.params = ListUtils.immutableCopy(Objects.requireNonNull(params, "params must not be null"));
+        this.params = ListUtils.immutableCopy(Objects.requireNonNull(params, "Params must not be null"));
         int placeholderCount = SqlUtils.countSqlPlaceholders(this.sql);
         if (placeholderCount != this.params.size()) {
             // @formatter:off
