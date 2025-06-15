@@ -2,10 +2,11 @@ package dev.lycosp.xqlite.ast.nodes;
 
 import dev.lycosp.xqlite.ast.SqlNode;
 import dev.lycosp.xqlite.ast.SqlVisitor;
+import dev.lycosp.xqlite.utils.StringUtils;
 
 import java.util.Objects;
 
-public class ColumnNode implements SqlNode {
+public final class ColumnNode implements SqlNode {
     private final String tableAlias;
     private final String name;
 
@@ -19,7 +20,7 @@ public class ColumnNode implements SqlNode {
 
     private ColumnNode(String tableAlias, String name) {
         this.tableAlias = tableAlias;
-        this.name = Objects.requireNonNull(name);
+        this.name = StringUtils.requireNonBlank(name, "Column name cannot be blank");
     }
 
     public String getTableAlias() {
@@ -32,6 +33,27 @@ public class ColumnNode implements SqlNode {
 
     @Override
     public <R> R accept(SqlVisitor<R> visitor) {
-        return null;
+        return visitor.visitColumn(this);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ColumnNode that = (ColumnNode) o;
+        return Objects.equals(tableAlias, that.tableAlias) && Objects.equals(name, that.name);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(tableAlias, name);
+    }
+
+    @Override
+    public String toString() {
+        return "ColumnNode{" +
+                "tableAlias='" + tableAlias + '\'' +
+                ", name='" + name + '\'' +
+                '}';
     }
 }
