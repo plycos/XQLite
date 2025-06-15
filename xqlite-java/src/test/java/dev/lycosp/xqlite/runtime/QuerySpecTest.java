@@ -31,29 +31,29 @@ public class QuerySpecTest {
         assertEquals(params, qs.getParams());
     }
 
-    @Test(expected = NullPointerException.class)
+    @Test
     public void testOfNullSql() {
-        QuerySpec.of(null);
+        assertThrows(NullPointerException.class, () -> QuerySpec.of(null));
     }
 
-    @Test(expected = NullPointerException.class)
+    @Test
     public void testOfNullParamsVarargs() {
-        QuerySpec.of("SELECT ?", (Object[]) null);
+        assertThrows(NullPointerException.class, () -> QuerySpec.of("SELECT ?", (Object[]) null));
     }
 
-    @Test(expected = NullPointerException.class)
+    @Test
     public void testOfNullParamsList() {
-        QuerySpec.of("SELECT ?", (List<Object>) null);
+        assertThrows(NullPointerException.class, () -> QuerySpec.of("SELECT ?", (List<Object>) null));
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testParamCountMismatchTooFew() {
-        QuerySpec.of("SELECT * FROM t WHERE a = ? AND b = ?", 1);
+        assertThrows(IllegalArgumentException.class, () -> QuerySpec.of("SELECT * FROM t WHERE a = ? AND b = ?", 1));
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testParamCountMismatchTooMany() {
-        QuerySpec.of("SELECT * FROM t WHERE a = ?", 1, 2);
+        assertThrows(IllegalArgumentException.class, () -> QuerySpec.of("SELECT * FROM t WHERE a = ?", 1, 2));
     }
 
     @Test
@@ -113,14 +113,14 @@ public class QuerySpecTest {
         assertEquals(Collections.singletonList(null), qs.getParams());
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testEmptySqlString() {
-        QuerySpec.of("");
+        assertThrows(IllegalArgumentException.class, () -> QuerySpec.of(""));
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testWhitespaceOnlySql() {
-        QuerySpec.of("   ");
+        assertThrows(IllegalArgumentException.class, () -> QuerySpec.of("   "));
     }
 
     @Test
@@ -140,8 +140,8 @@ public class QuerySpecTest {
         }
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testNoPlaceholdersButParamsGiven() {
-        QuerySpec.of("SELECT 1", 42);
+        assertThrows(IllegalArgumentException.class, () -> QuerySpec.of("SELECT 1", 42));
     }
 }

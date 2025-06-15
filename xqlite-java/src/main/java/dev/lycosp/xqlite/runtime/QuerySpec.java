@@ -1,9 +1,21 @@
 package dev.lycosp.xqlite.runtime;
 
-import java.util.*;
+import dev.lycosp.xqlite.utils.ListUtils;
+import dev.lycosp.xqlite.utils.SqlUtils;
+import dev.lycosp.xqlite.utils.StringUtils;
+
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.Objects;
 
 /**
  * Immutable, thread-safe value object representing a SQL query and its parameters.
+ *
+ * <p>
+ * Repository: <a href="https://github.com/plycos/xqlite">https://github.com/plycos/xqlite</a>
+ * </p>
+ *
  * <p>
  * Use {@link #of(String)}, {@link #of(String, Object...)}, or {@link #of(String, List)} to create instances.
  * The parameter list is always unmodifiable and never {@code null}.
@@ -31,10 +43,6 @@ import java.util.*;
  * // Output: QuerySpec{sql='SELECT * FROM users WHERE id = ?', params=[42]}
  * }
  * </pre>
- *
- * <p>
- * Repository: <a href="https://github.com/plycos/xqlite">https://github.com/plycos/xqlite</a>
- * </p>
  *
  * @author <a href="https://github.com/plycos">Peter Lycos (@plycos)</a>
  */
@@ -100,12 +108,9 @@ public final class QuerySpec {
      * @throws IllegalArgumentException if {@code sql} is empty or whitespace only
      */
     private QuerySpec(String sql, List<Object> params) {
-        this.sql = Objects.requireNonNull(sql, "sql must not be null");
-        if (sql.trim().isEmpty()) {
-            throw new IllegalArgumentException("SQL must not be empty or whitespace only");
-        }
-        this.params = Collections.unmodifiableList(new ArrayList<>(Objects.requireNonNull(params, "params must not be null")));
-        int placeholderCount = countSqlPlaceholders(this.sql);
+        this.sql = StringUtils.requireNonBlank(sql, "SQL must not be blank, but got \"" + sql + "\"");
+        this.params = ListUtils.immutableCopy(Objects.requireNonNull(params, "params must not be null"));
+        int placeholderCount = SqlUtils.countSqlPlaceholders(this.sql);
         if (placeholderCount != this.params.size()) {
             // @formatter:off
             throw new IllegalArgumentException(
@@ -114,32 +119,6 @@ public final class QuerySpec {
             );
             // @formatter:on
         }
-    }
-
-    /**
-     * Counts the number of positional parameter placeholders ('?') in the given SQL statement,
-     * ignoring any that appear inside single-quoted string literals.
-     *
-     * @param sql the SQL statement to analyze (must not be {@code null})
-     * @return the number of positional parameter placeholders outside string literals
-     */
-    private static int countSqlPlaceholders(String sql) {
-        int count = 0;
-        boolean inSingleQuote = false;
-        for (int i = 0; i < sql.length(); i++) {
-            char c = sql.charAt(i);
-            if (c == '\'') {
-                if (inSingleQuote && i + 1 < sql.length() && sql.charAt(i + 1) == '\'') {
-                    // Escaped single quote inside string literal, skip next character
-                    i++;
-                } else {
-                    inSingleQuote = !inSingleQuote;
-                }
-            } else if (c == '?' && !inSingleQuote) {
-                count++;
-            }
-        }
-        return count;
     }
 
     /**
