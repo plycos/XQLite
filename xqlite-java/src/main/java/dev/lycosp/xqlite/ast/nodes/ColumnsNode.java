@@ -50,4 +50,24 @@ public final class ColumnsNode implements SqlNode {
     public <R> R accept(SqlVisitor<R> visitor) {
         return null;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ColumnsNode that = (ColumnsNode) o;
+        return Objects.equals(columns, that.columns);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(columns);
+    }
+
+    @Override
+    public String toString() {
+        return "ColumnsNode{" +
+                "columns=" + columns +
+                '}';
+    }
 }

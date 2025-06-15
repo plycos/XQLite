@@ -33,4 +33,25 @@ public final class SelectNode implements SqlNode {
     public <R> R accept(SqlVisitor<R> visitor) {
         return visitor.visitSelect(this);
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        SelectNode that = (SelectNode) o;
+        return Objects.equals(columns, that.columns) && Objects.equals(from, that.from);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(columns, from);
+    }
+
+    @Override
+    public String toString() {
+        return "SelectNode{" +
+                "columns=" + columns +
+                ", from=" + from +
+                '}';
+    }
 }

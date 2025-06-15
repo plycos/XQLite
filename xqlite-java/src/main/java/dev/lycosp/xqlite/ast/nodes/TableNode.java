@@ -4,6 +4,8 @@ import dev.lycosp.xqlite.ast.SqlNode;
 import dev.lycosp.xqlite.ast.SqlVisitor;
 import dev.lycosp.xqlite.utils.StringUtils;
 
+import java.util.Objects;
+
 public final class TableNode implements SqlNode {
     private final String name;
     private final String alias;
@@ -47,9 +49,29 @@ public final class TableNode implements SqlNode {
         return alias;
     }
 
-
     @Override
     public <R> R accept(SqlVisitor<R> visitor) {
         return visitor.visitTable(this);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        TableNode tableNode = (TableNode) o;
+        return Objects.equals(name, tableNode.name) && Objects.equals(alias, tableNode.alias);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, alias);
+    }
+
+    @Override
+    public String toString() {
+        return "TableNode{" +
+                "name='" + name + '\'' +
+                ", alias='" + alias + '\'' +
+                '}';
     }
 }
