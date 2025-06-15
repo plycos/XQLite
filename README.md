@@ -3,6 +3,8 @@
 A lightweight, type-safe SQL query builder for Java.  
 Compose SQL queries using a fluent, immutable API that abstracts away AST details and provides convenient rendering and parameterization.
 
+> **Note:** XQLite Java is an early-stage project and is **not a fully featured SQL builder**. It currently supports a limited subset of SQL and may lack advanced features found in mature libraries.
+
 ## Features
 
 - Immutable, thread-safe query objects
