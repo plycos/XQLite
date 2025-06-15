@@ -1,17 +1,17 @@
 package dev.lycosp.xqlite;
 
-import dev.lycosp.xqlite.ast.SqlRenderer;
-import dev.lycosp.xqlite.ast.nodes.select.SelectNode;
+import dev.lycosp.xqlite.api.SelectQuery;
 
-import static dev.lycosp.xqlite.ast.Nodes.*;
+import static dev.lycosp.xqlite.api.XQLite.select;
+import static dev.lycosp.xqlite.api.XQLite.cols;
+import static dev.lycosp.xqlite.api.XQLite.from;
 
 public class Main {
     public static void main(String[] args) {
-        SelectNode selectNode =
-                select(
-                        cols("col1", "col2", "col3"),
-                        from("table")
-                );
-        System.out.println(SqlRenderer.render(selectNode));
+        SelectQuery selectQuery = select(
+                cols("col1", "col2", "col3"),
+                from("table")
+        );
+        System.out.println(selectQuery.render());
     }
 }

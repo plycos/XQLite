@@ -1,5 +1,6 @@
-package dev.lycosp.xqlite.ast;
+package dev.lycosp.xqlite.api;
 
+import dev.lycosp.xqlite.ast.SqlNode;
 import dev.lycosp.xqlite.ast.nodes.ColumnNode;
 import dev.lycosp.xqlite.ast.nodes.ColumnsNode;
 import dev.lycosp.xqlite.ast.nodes.TableNode;
@@ -21,7 +22,7 @@ import dev.lycosp.xqlite.ast.nodes.select.SelectNode;
  *
  * <pre>
  * {@code
- * import static dev.lycosp.xqlite.ast.Nodes.*;
+ * import static dev.lycosp.xqlite.api.XQLite.*;
  *
  * SelectNode selectNode = select(
  *     cols("col1", "col2", "col3"),
@@ -32,8 +33,8 @@ import dev.lycosp.xqlite.ast.nodes.select.SelectNode;
  *
  * @author <a href="https://github.com/plycos">Peter Lycos (@plycos)</a>
  */
-public final class Nodes {
-    private Nodes() {
+public final class XQLite {
+    private XQLite() {
     }
 
     // --- SelectNode ---
@@ -43,8 +44,8 @@ public final class Nodes {
      *
      * @see SelectBuilder#select(SqlNode...)
      */
-    public static SelectNode select(SqlNode... args) {
-        return SelectBuilder.select(args);
+    public static SelectQuery select(SqlNode... args) {
+        return SelectQuery.select(args);
     }
 
 
