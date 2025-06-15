@@ -32,6 +32,6 @@ public class ColumnNode implements SqlNode {
 
     @Override
     public <R> R accept(SqlVisitor<R> visitor) {
-        return null;
+        return visitor.visitColumn(this);
     }
 }
