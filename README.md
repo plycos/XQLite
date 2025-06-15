@@ -1,0 +1,31 @@
+# XQLite Java
+
+A lightweight, type-safe SQL query builder for Java.  
+Compose SQL queries using a fluent, immutable API that abstracts away AST details and provides convenient rendering and parameterization.
+
+## Features
+
+- Immutable, thread-safe query objects
+- Type-safe SQL AST nodes
+- Fluent API for building queries
+- Convenient rendering to SQL and parameter lists
+
+## Example Usage
+
+```java
+import dev.lycosp.xqlite.api.SelectQuery;
+
+import static dev.lycosp.xqlite.api.XQLite.*;
+
+public class Main {
+    public static void main(String[] args) {
+        SelectQuery selectQuery = select(
+            cols("id", "name"),
+            from("users")
+        );
+        // Prints: SQL: SELECT id, name FROM users
+        System.out.println("SQL: " + selectQuery.toSql());
+        // Prints: Params: []
+        System.out.println("Params: " + selectQuery.getParams());
+    }
+}
