@@ -20,14 +20,6 @@ public final class ColumnsNode implements SqlNode {
         return new ColumnsNode(columnNodes);
     }
 
-    public static ColumnsNode colStrings(List<String> columns) {
-        List<ColumnNode> columnNodes = new ArrayList<>();
-        for (String column : columns) {
-            columnNodes.add(ColumnNode.col(column));
-        }
-        return new ColumnsNode(columnNodes);
-    }
-
     public static ColumnsNode cols(ColumnNode... columns) {
         List<ColumnNode> columnNodes = new ArrayList<>();
         Collections.addAll(columnNodes, columns);
@@ -36,6 +28,14 @@ public final class ColumnsNode implements SqlNode {
 
     public static ColumnsNode cols(List<ColumnNode> columns) {
         return new ColumnsNode(columns);
+    }
+
+    public static ColumnsNode colStrings(List<String> columns) {
+        List<ColumnNode> columnNodes = new ArrayList<>();
+        for (String column : columns) {
+            columnNodes.add(ColumnNode.col(column));
+        }
+        return new ColumnsNode(columnNodes);
     }
 
     private ColumnsNode(List<ColumnNode> columns) {

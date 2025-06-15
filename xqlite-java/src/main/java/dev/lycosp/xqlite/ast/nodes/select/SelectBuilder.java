@@ -9,10 +9,42 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Utility class for constructing {@link SelectNode} instances from AST nodes.
+ * <p>
+ * The {@code SelectBuilder} provides a static method to build a {@link SelectNode}
+ * by passing the required column and table nodes as arguments.
+ * </p>
+ */
 public final class SelectBuilder {
     private SelectBuilder() {
     }
 
+    /**
+     * Constructs a {@link SelectNode} from the given arguments.
+     * <p>
+     * Example usage:
+     * </p>
+     * <pre>{@code
+     * SelectNode selectNode =
+     *     select(
+     *         cols("col1", "col2", "col3"),
+     *         from("table")
+     *     );
+     * }</pre>
+     * <p>
+     * Expects one {@link ColumnsNode} (for the columns) and one {@link TableNode} (for the source table).
+     * Any unsupported or null arguments will result in an {@link IllegalArgumentException}
+     * with a detailed error message listing the problematic argument indices and types.
+     * </p>
+     *
+     * @param args the AST nodes to build the select statement from;
+     *             must include exactly one {@link ColumnsNode} (for columns)
+     *             and one {@link TableNode} (for the source table), in any order
+     * @return a new {@link SelectNode} instance
+     * @throws IllegalArgumentException if unsupported node types are provided,
+     *                                  or if columns or table are missing
+     */
     public static SelectNode select(SqlNode... args) {
         Map<Integer, SqlNode> unsupportedNodes = new LinkedHashMap<>();
         List<ColumnNode> columns = null;
