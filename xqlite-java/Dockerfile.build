@@ -22,5 +22,10 @@ WORKDIR /app
 COPY pom.xml .
 COPY --from=build /app/target /app/target
 COPY --from=dependencies /root/.m2 /root/.m2
-RUN --mount=type=secret,id=maven_settings,target=/root/.m2/settings.xml \
-    mvn -B -ntp -T 1C deploy -DskipTests
+ARG MAVEN_USERNAME
+COPY settings.xml /root/.m2/settings.xml.template
+RUN --mount=type=secret,id=MAVEN_TOKEN \
+    export MAVEN_TOKEN=$(cat /run/secrets/MAVEN_TOKEN) && \
+    export MAVEN_USERNAME=${MAVEN_USERNAME} && \
+    envsubst < /root/.m2/settings.xml.template > /root/.m2/settings.xml
+RUN mvn -B -ntp -T 1C deploy -DskipTests
