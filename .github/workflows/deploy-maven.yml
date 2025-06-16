@@ -32,6 +32,6 @@ jobs:
           file: 'Dockerfile.build'
           target: 'deploy'
           secret-files: |
-            "MAVEN_SETTINGS=./maven-settings.xml"
+            "MAVEN_SETTINGS=./xqlite-java/maven-settings.xml"
           cache-from: type=gha
           cache-to: type=gha,mode=max
