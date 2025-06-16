@@ -18,7 +18,7 @@ jobs:
         shell: bash
         run: |
           export MAVEN_USERNAME=plycos
-          export MAVEN_TOKEN=${{ secrets.GHCR_PAT }}
+          export MAVEN_TOKEN=${{ secrets.REGISTRY_TOKEN }}
           envsubst < ./xqlite-java/settings.xml > maven-settings.xml
 
       - name: Set up Docker Buildx
