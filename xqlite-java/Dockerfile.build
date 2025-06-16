@@ -1,0 +1,27 @@
+FROM maven:3.9.9-eclipse-temurin-8-noble AS dependencies
+WORKDIR /app
+COPY pom.xml .
+RUN mvn -B -T 1C dependency:go-offline
+
+FROM maven:3.9.9-eclipse-temurin-8-noble AS test
+WORKDIR /app
+COPY pom.xml .
+COPY src ./src
+COPY --from=dependencies /root/.m2 /root/.m2
+RUN mvn -B -T 1C test
+
+FROM maven:3.9.9-eclipse-temurin-8-noble AS build
+WORKDIR /app
+COPY pom.xml .
+COPY src ./src
+COPY --from=test /root/.m2 /root/.m2
+RUN mvn -B -T 1C package -DskipTests
+
+FROM maven:3.9.9-eclipse-temurin-8-noble AS deploy
+WORKDIR /app
+COPY pom.xml .
+COPY settings.xml /root/.m2/settings.xml
+COPY --from=build /app/target /app/target
+COPY --from=dependencies /root/.m2 /root/.m2
+RUN --mount=type=secret,id=maven_settings,target=/root/.m2/settings.xml \
+    mvn -B -T 1C deploy -DskipTests

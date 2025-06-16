@@ -6,7 +6,14 @@
 
     <groupId>dev.lycosp</groupId>
     <artifactId>xqlite-java</artifactId>
-    <version>0.1.0-SNAPSHOT</version>
+    <version>0.1.0</version>
+    <url>https://github.com/plycos/XQLite</url>
+    <scm>
+        <url>https://github.com/plycos/XQLite</url>
+        <connection>scm:git:https://github.com/plycos/XQLite.git</connection>
+        <developerConnection>scm:git:git@github.com:plycos/XQLite.git</developerConnection>
+        <tag>HEAD</tag>
+    </scm>
 
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
@@ -59,4 +66,11 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
+
+    <distributionManagement>
+        <repository>
+            <id>github</id>
+            <url>https://maven.pkg.github.com/plycos/XQLite</url>
+        </repository>
+    </distributionManagement>
 </project>
