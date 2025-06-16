@@ -1,0 +1,35 @@
+name: Deploy Maven
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout ${{ github.ref_name }}
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: '0'
+
+      - name: Render settings.xml with GitHub secrets
+        shell: bash
+        run: |
+          export MAVEN_USERNAME=plycos
+          export MAVEN_TOKEN=${{ secrets.GHCR_PAT }}
+          envsubst < .github/maven/settings-template.xml > maven-settings.xml
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build and Push to XQLite Maven Registry
+        uses: docker/build-push-action@v6
+        with:
+          push: false
+          context: './xqlite-java/'
+          file: 'Dockerfile.build'
+          target: 'deploy'
+          secrets: |
+            id=maven_settings,src=maven-settings.xml
