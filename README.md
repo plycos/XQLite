@@ -9,7 +9,7 @@ Compose SQL queries using a fluent, immutable API that abstracts away AST detail
 
 - Immutable, thread-safe query objects
 - Type-safe SQL AST nodes
-- Fluent API for building queries
+- Lisp like API for building queries
 - Convenient rendering to SQL and parameter lists
 
 ## Example Usage
