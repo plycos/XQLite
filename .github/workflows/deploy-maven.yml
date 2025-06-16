@@ -32,6 +32,6 @@ jobs:
           file: 'Dockerfile.build'
           target: 'deploy'
           secrets: |
-            id=maven_settings,src=maven-settings.xml
+            maven_settings=./maven-settings.xml
           cache-from: type=gha
           cache-to: type=gha,mode=max
