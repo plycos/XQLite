@@ -31,8 +31,7 @@ jobs:
           context: '{{defaultContext}}:xqlite-java'
           file: 'Dockerfile.build'
           target: 'deploy'
-          secrets: |
-            MAVEN_TOKEN=${{ secrets.REGISTRY_TOKEN }}
+          secret-files: |
             "MAVEN_SETTINGS=$HOME/maven-settings.xml"
           cache-from: type=gha
           cache-to: type=gha,mode=max
