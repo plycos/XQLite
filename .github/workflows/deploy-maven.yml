@@ -14,6 +14,13 @@ jobs:
         with:
           fetch-depth: '0'
 
+      - name: Render settings.xml with GitHub secrets
+        shell: bash
+        run: |
+          export MAVEN_USERNAME=plycos
+          export MAVEN_TOKEN=${{ secrets.REGISTRY_TOKEN }}
+          envsubst < ./xqlite-java/settings.xml > $HOME/maven-settings.xml
+
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
@@ -26,5 +33,6 @@ jobs:
           target: 'deploy'
           secrets: |
             MAVEN_TOKEN=${{ secrets.REGISTRY_TOKEN }}
+            "MAVEN_SETTINGS=$HOME/maven-settings.xml"
           cache-from: type=gha
           cache-to: type=gha,mode=max
