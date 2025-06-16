@@ -28,8 +28,10 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           push: false
-          context: './xqlite-java/'
+          context: '{{defaultContext}}:xqlite-java'
           file: 'Dockerfile.build'
           target: 'deploy'
           secrets: |
             id=maven_settings,src=maven-settings.xml
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
