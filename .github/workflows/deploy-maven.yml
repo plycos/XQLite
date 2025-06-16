@@ -19,7 +19,7 @@ jobs:
         run: |
           export MAVEN_USERNAME=plycos
           export MAVEN_TOKEN=${{ secrets.REGISTRY_TOKEN }}
-          envsubst < ./xqlite-java/settings.xml > maven-settings.xml
+          envsubst < ./xqlite-java/settings.xml > $HOME/maven-settings.xml
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
@@ -32,6 +32,6 @@ jobs:
           file: 'Dockerfile.build'
           target: 'deploy'
           secrets: |
-            maven_settings=./maven-settings.xml
+            maven_settings=${{ env.HOME }}/maven-settings.xml
           cache-from: type=gha
           cache-to: type=gha,mode=max
