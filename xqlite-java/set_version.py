@@ -1,9 +1,10 @@
 import sys
 import xml.etree.ElementTree as ET
 
-bump_version = sys.argv[1]
+path_to_pom = sys.argv[1]
+bump_version = sys.argv[2]
 
-tree = ET.parse('./pom.xml')
+tree = ET.parse(path_to_pom)
 ns = {'m': 'http://maven.apache.org/POM/4.0.0'}
 
 root = tree.getroot()
