@@ -47,7 +47,7 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           push: false
-          context: '{{defaultContext}}:xqlite-java'
+          context: 'xqlite-java'
           file: 'Dockerfile.build'
           target: 'deploy'
           secret-files: |
