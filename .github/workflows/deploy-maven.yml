@@ -26,9 +26,10 @@ jobs:
         id: semver
         shell: bash
         run: |
-          get_version=$(python ./xqlite-java/get_version.py $path_to_pom)
+          pom="./xqlite-java/pom.xml"
+          get_version=$(python ./xqlite-java/get_version.py $pom)
           version=$(python ./bump_version.py $get_version ${{ steps.change-type.outputs.type }})
-          python ./xqlite-java/set_version.py ./xqlite-java/pom.xml $version
+          python ./xqlite-java/set_version.py $pom $version
           echo "version=$version" >> $GITHUB_OUTPUT
           echo "$version"
 
