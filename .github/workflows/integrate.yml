@@ -79,7 +79,7 @@ jobs:
       - name: Upload Jar
         uses: actions/upload-artifact@v4
         with:
-          name: XQLite
+          name: XQLite-${{ steps.semver.outputs.version }}-SNAPSHOT
           path: ./output/artifacts/output
 #
 #  integrate:
