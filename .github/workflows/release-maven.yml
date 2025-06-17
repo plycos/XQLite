@@ -1,4 +1,4 @@
-name: Deploy Maven
+name: Release Maven
 
 on:
   push:
@@ -16,6 +16,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: '0'
+          token: ${{ secrets.INTEGRATE_TOKEN }}
 
       - name: Get Change Type
         id: change-type
@@ -23,18 +24,21 @@ jobs:
         run: |
           change_type=$(git log -1 --merges --oneline | grep -Pio "\b(major|minor|patch|hotfix)(?=\/)")
           echo "type=$change_type" >> $GITHUB_OUTPUT
-          echo "$change_type"
 
-      - name: Bump ${{ steps.change-type.outputs.type }} version
-        id: semver
+      - name: Get Current Version
+        id: current-version
         shell: bash
         run: |
           pom="./xqlite-java/pom.xml"
-          get_version=$(python ./xqlite-java/get_version.py $pom)
-          version=$(python ./bump_version.py $get_version ${{ steps.change-type.outputs.type }})
-          python ./xqlite-java/set_version.py $pom $version
-          echo "version=$version" >> $GITHUB_OUTPUT
-          echo "$version"
+          current_version=$(python ./xqlite-java/get_version.py $pom)
+          echo "current_version=$current_version" >> $GITHUB_OUTPUT
+
+      - name: Bump Version
+        id: semver
+        shell: bash
+        run: |
+          new_version=$(python ./bump_version.py ${{ steps.current-version.outputs.current_version }} ${{ steps.change-type.outputs.type }})
+          echo "version=$new_version" >> $GITHUB_OUTPUT
 
       - name: Render settings.xml with GitHub secrets
         shell: bash
@@ -46,7 +50,7 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
-      - name: Build and Push to XQLite Maven Registry
+      - name: Deploy to XQLite Registry
         uses: docker/build-push-action@v6
         with:
           push: false
@@ -55,21 +59,23 @@ jobs:
           target: 'deploy'
           secret-files: |
             "MAVEN_SETTINGS=./xqlite-java/maven-settings.xml"
-      #          cache-from: type=gha
-      #          cache-to: type=gha,mode=max
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
 
-      - name: Bump to Snapshot ${{ steps.semver.outputs.version }}
-        if: success()
+      - name: Set Git User
         shell: bash
         run: |
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
-          version=${{ steps.semver.outputs.version }}-SNAPSHOT
-          python ./xqlite-java/set_version.py ./xqlite-java/pom.xml $version
-          git add ./xqlite-java/pom.xml
-          git commit -m "[skip ci] Bump to Snapshot version $version"
 
-      - name: Push Snapshot Commit
+      - name: Commit Bumped Version
         if: success()
         shell: bash
-        run: git push origin HEAD:master
+        run: |
+          git add ./xqlite-java/pom.xml
+          git commit -m "[skip ci] Bump to version $version"
+
+      - name: Push Commit
+        if: success()
+        shell: bash
+        run: git push origin HEAD:master --force

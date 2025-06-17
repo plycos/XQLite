@@ -1,0 +1,78 @@
+name: Integrate
+
+on:
+  pull_request:
+
+permissions:
+  contents: write
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout ${{ github.ref }}
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Run Tests
+        uses: docker/build-push-action@v6
+        with:
+          push: false
+          context: './xqlite-java'
+          file: './xqlite-java/Dockerfile.build'
+          target: 'test-results'
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          outputs: type=local,dest=./output/tests
+
+      - name: Display JUnit Report
+        if: ${{ !cancelled() }}
+        uses: dorny/test-reporter@v2
+        with:
+          name: JUnit Tests
+          reporter: java-junit
+          path: ./output/tests/output/surefire-reports/*.xml
+
+      - name: Output Jar
+        uses: docker/build-push-action@v6
+        with:
+          push: false
+          context: './xqlite-java'
+          file: './xqlite-java/Dockerfile.build'
+          target: 'output'
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          outputs: type=local,dest=./output/artifacts
+
+      - name: Upload Jar
+        uses: actions/upload-artifact@v4
+        with:
+          name: XQLite
+          path: ./output/artifacts/output
+#
+#  integrate:
+#    runs-on: ubuntu-latest
+#    needs: verify
+#    steps:
+#      - name: Checkout ${{ github.ref }}
+#        uses: actions/checkout@v4
+#        with:
+#          fetch-depth: '0'
+#
+#      - name: Set Git User
+#        shell: bash
+#        run: |
+#          git config user.name "github-actions"
+#          git config user.email "github-actions@github.com"
+#
+#      - name: Merge to Development
+#        shell: bash
+#        env:
+#          BRANCH: ${{ github.ref_name }}
+#        run: |
+#          git fetch origin development
+#          git switch development
+#          git merge "$BRANCH"
+#          git push origin HEAD:development

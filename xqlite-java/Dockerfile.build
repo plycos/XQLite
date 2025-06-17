@@ -14,6 +14,11 @@ COPY pom.xml .
 COPY src ./src
 COPY --from=dependencies /root/.m2 /root/.m2
 RUN ./mvnw -B -ntp -T 1C verify
+RUN mkdir -p /app/test-results && cp -r /app/target/surefire-reports /app/test-results
+
+FROM scratch AS test-results
+WORKDIR /output
+COPY --from=verify /app/test-results /output
 
 FROM base AS build
 WORKDIR /app
@@ -32,4 +37,4 @@ RUN --mount=type=secret,id=MAVEN_SETTINGS \
 
 FROM scratch AS output
 WORKDIR /output
-COPY --from=build /app/target ./output
+COPY --from=build /app/target/*.jar /output
