@@ -4,6 +4,7 @@ import dev.lycosp.xqlite.ast.SqlNode;
 import dev.lycosp.xqlite.ast.SqlVisitor;
 import dev.lycosp.xqlite.ast.nodes.ColumnNode;
 import dev.lycosp.xqlite.ast.nodes.TableNode;
+import dev.lycosp.xqlite.ast.nodes.expression.*;
 import dev.lycosp.xqlite.ast.nodes.select.SelectNode;
 import dev.lycosp.xqlite.runtime.QuerySpec;
 
@@ -46,5 +47,45 @@ public final class SelectRenderVisitor implements SqlVisitor<QuerySpec> {
                 ? node.getName() + " " + node.getAlias()
                 : node.getName();
         return QuerySpec.of(table);
+    }
+
+    @Override
+    public QuerySpec visitAnd(AndNode node) {
+        return null;
+    }
+
+    @Override
+    public QuerySpec visitOr(OrNode node) {
+        return null;
+    }
+
+    @Override
+    public QuerySpec visitEq(EqNode node) {
+        return null;
+    }
+
+    @Override
+    public QuerySpec visitLt(LtNode node) {
+        return null;
+    }
+
+    @Override
+    public QuerySpec visitGt(GtNode node) {
+        return null;
+    }
+
+    @Override
+    public QuerySpec visitLe(LeNode node) {
+        return null;
+    }
+
+    @Override
+    public QuerySpec visitGe(GeNode node) {
+        return null;
+    }
+
+    @Override
+    public QuerySpec visitNe(NeNode node) {
+        return null;
     }
 }
