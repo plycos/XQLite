@@ -25,9 +25,10 @@ jobs:
         id: semver
         shell: bash
         run: |
-          get_version=$(python ./xqlite-java/get_version.py)
+          path_to_pom=$(readlink -f ./xqlite-java/pom.xml)
+          get_version=$(python ./xqlite-java/get_version.py $path_to_pom)
           version=$(python ./bump_version.py $get_version ${{ steps.change-type.outputs.type }})
-          python ./xqlite-java/set_version.py $version
+          python ./xqlite-java/set_version.py $path_to_pom $version
           echo "version=$version" >> $GITHUB_OUTPUT
 
       - name: Render settings.xml with GitHub secrets
@@ -57,9 +58,10 @@ jobs:
         shell: bash
         run: |
           git config user.name "github-actions"
-          git config user.email "github-actions@github.com"          
+          git config user.email "github-actions@github.com"
+          path_to_pom=$(readlink -f ./xqlite-java/pom.xml)
           version=${{ steps.semver.outputs.version }}-SNAPSHOT
-          python ./xqlite-java/set_version.py $version
+          python ./xqlite-java/set_version.py $path_to_pom $version
           git add ./xqlite-java/pom.xml
           git commit -m "[skip ci] Bump to Snapshot version $version"
 
