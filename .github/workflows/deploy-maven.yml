@@ -5,6 +5,9 @@ on:
     branches:
       - master
 
+permissions:
+  contents: write
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -52,8 +55,8 @@ jobs:
           target: 'deploy'
           secret-files: |
             "MAVEN_SETTINGS=./xqlite-java/maven-settings.xml"
-#          cache-from: type=gha
-#          cache-to: type=gha,mode=max
+      #          cache-from: type=gha
+      #          cache-to: type=gha,mode=max
 
       - name: Bump to Snapshot ${{ steps.semver.outputs.version }}
         if: success()
