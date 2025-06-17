@@ -32,4 +32,4 @@ RUN --mount=type=secret,id=MAVEN_SETTINGS \
 
 FROM scratch AS output
 WORKDIR /output
-COPY --from=build /app/target
+COPY --from=build /app/target ./output
