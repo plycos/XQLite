@@ -5,10 +5,22 @@ Compose SQL queries using a fluent, immutable API that abstracts away AST detail
 
 > **Note:** XQLite Java is an early-stage project and is **not a fully featured SQL builder**. It currently supports a limited subset of SQL and may lack advanced features found in mature libraries.
 
+## Roadmap
+
+- [ ] WHERE clauses w/ basic expressions
+- [ ] JOIN support
+- [ ] Ordering
+- [ ] Pagination
+- [ ] Advanced expressions and function support
+- [ ] Comprehensive test coverage
+- [ ] Documentation improvements
+- [ ] ResultSet mapping (unsure)
+- [ ] Compile time safety (unsure)
+
 ## Features
 
 - Immutable, thread-safe query objects
-- Type-safe SQL AST nodes
+- SQL AST nodes with type-safety goals (WIP)
 - Lisp like API for building queries
 - Convenient rendering to SQL and parameter lists
 
