@@ -1,26 +1,35 @@
-FROM maven:3.9.9-eclipse-temurin-8-noble AS dependencies
+FROM eclipse-temurin:8-jdk-noble AS base
+WORKDIR /app
+COPY mvnw mvnw
+COPY .mvn .mvn
+
+FROM base AS dependencies
 WORKDIR /app
 COPY pom.xml .
-RUN mvn -B -ntp -T 1C dependency:go-offline
+RUN ./mvnw -B -ntp -T 1C dependency:go-offline
 
-FROM maven:3.9.9-eclipse-temurin-8-noble AS test
+FROM base AS verify
 WORKDIR /app
 COPY pom.xml .
 COPY src ./src
 COPY --from=dependencies /root/.m2 /root/.m2
-RUN mvn -B -ntp -T 1C test
+RUN ./mvnw -B -ntp -T 1C verify
 
-FROM maven:3.9.9-eclipse-temurin-8-noble AS build
+FROM base AS build
 WORKDIR /app
 COPY pom.xml .
 COPY src ./src
-COPY --from=test /root/.m2 /root/.m2
-RUN mvn -B -ntp -T 1C package -DskipTests
+COPY --from=verify /root/.m2 /root/.m2
+RUN ./mvnw -B -ntp -T 1C package -Dmaven.test.skip=true
 
-FROM maven:3.9.9-eclipse-temurin-8-noble AS deploy
+FROM base AS deploy
 WORKDIR /app
 COPY pom.xml .
 COPY --from=build /app/target /app/target
 COPY --from=dependencies /root/.m2 /root/.m2
 RUN --mount=type=secret,id=MAVEN_SETTINGS \
-    mvn -B -ntp -T 1C -s /run/secrets/MAVEN_SETTINGS deploy -DskipTests
+    ./mvnw -B -ntp -T 1C -s /run/secrets/MAVEN_SETTINGS deploy -Dmaven.test.skip=true
+
+FROM scratch AS output
+WORKDIR /output
+COPY --from=build /app/target
