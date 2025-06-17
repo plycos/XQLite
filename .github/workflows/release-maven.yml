@@ -8,6 +8,10 @@ on:
 permissions:
   contents: write
 
+concurrency:
+  group: semver-bump
+  cancel-in-progress: true
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
