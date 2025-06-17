@@ -16,12 +16,6 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
-      - name: Set up Directories
-        shell: bash
-        run: |
-          mkdir -p /test-results
-          mkdir -p /artifacts
-
       - name: Run Tests
         uses: docker/build-push-action@v6
         with:
@@ -31,7 +25,7 @@ jobs:
           target: 'test-results'
           cache-from: type=gha
           cache-to: type=gha,mode=max
-          outputs: type=local,dest=/test-results
+          outputs: type=local,dest=./output/tests
 
       - name: Display JUnit Report
         if: ${{ !cancelled() }}
@@ -39,7 +33,7 @@ jobs:
         with:
           name: JUnit Tests
           reporter: java-junit
-          path: /test-results/output/surefire-reports/*.xml
+          path: ./output/tests/output/surefire-reports/*.xml
 
       - name: Output Jar
         uses: docker/build-push-action@v6
@@ -50,13 +44,13 @@ jobs:
           target: 'output'
           cache-from: type=gha
           cache-to: type=gha,mode=max
-          outputs: type=local,dest=/artifacts
+          outputs: type=local,dest=./output/artifacts
 
       - name: Upload Jar
         uses: actions/upload-artifact@v4
         with:
           name: XQLite
-          path: /artifacts/output
+          path: ./output/artifacts/output
 #
 #  integrate:
 #    runs-on: ubuntu-latest
