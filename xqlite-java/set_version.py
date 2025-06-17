@@ -13,7 +13,7 @@ version_el = root.find('m:version', ns)
 if version_el is not None:
     version_el.text = bump_version
     ET.register_namespace('', 'http://maven.apache.org/POM/4.0.0')
-    tree.write('./pom.xml', encoding='utf-8', xml_declaration=True)
+    tree.write(path_to_pom, encoding='utf-8', xml_declaration=True)
 else:
     print('Version tag not found', file=sys.stderr)
     sys.exit(1)
