@@ -20,6 +20,7 @@ jobs:
         run: |
           change_type=$(git log -1 --merges --oneline | grep -Pio "\b(major|minor|patch|hotfix)(?=\/)")
           echo "type=$change_type" >> $GITHUB_OUTPUT
+          echo "$change_type"
 
       - name: Bump ${{ steps.change-type.outputs.type }} version
         id: semver
@@ -30,6 +31,7 @@ jobs:
           version=$(python ./bump_version.py $get_version ${{ steps.change-type.outputs.type }})
           python ./xqlite-java/set_version.py $path_to_pom $version
           echo "version=$version" >> $GITHUB_OUTPUT
+          echo "$version"
 
       - name: Render settings.xml with GitHub secrets
         shell: bash
