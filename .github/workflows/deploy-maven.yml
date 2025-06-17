@@ -14,6 +14,11 @@ jobs:
         with:
           fetch-depth: '0'
 
+      - name: Semantic Versioning
+        shell: python
+        run: |
+          
+
       - name: Render settings.xml with GitHub secrets
         shell: bash
         run: |
