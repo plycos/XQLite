@@ -72,7 +72,7 @@ jobs:
         shell: bash
         run: |
           git add ./xqlite-java/pom.xml
-          git commit -m "[skip ci] Bump to Snapshot version $version"
+          git commit -m "[skip ci] Bump to version $version"
 
       - name: Push Commit
         if: success()
