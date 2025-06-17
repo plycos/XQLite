@@ -33,6 +33,12 @@ jobs:
           echo "version=$version" >> $GITHUB_OUTPUT
           echo "$version"
 
+      - name: Debug pom.xml
+        shell: bash
+        run: |
+          ls -l ./xqlite-java/pom.xml
+          cat ./xqlite-java/pom.xml
+
       - name: Render settings.xml with GitHub secrets
         shell: bash
         run: |
