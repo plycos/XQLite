@@ -50,27 +50,28 @@ jobs:
         with:
           name: XQLite
           path: ./artifacts
-
-  integrate:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout ${{ github.ref }}
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: '0'
-
-      - name: Set Git User
-        shell: bash
-        run: |
-          git config user.name "github-actions"
-          git config user.email "github-actions@github.com"
-
-      - name: Merge to Development
-        shell: bash
-        env:
-          BRANCH: ${{ github.ref_name }}
-        run: |
-          git fetch origin development
-          git switch development
-          git merge "$BRANCH"
-          git push origin HEAD:development
+#
+#  integrate:
+#    runs-on: ubuntu-latest
+#    needs: verify
+#    steps:
+#      - name: Checkout ${{ github.ref }}
+#        uses: actions/checkout@v4
+#        with:
+#          fetch-depth: '0'
+#
+#      - name: Set Git User
+#        shell: bash
+#        run: |
+#          git config user.name "github-actions"
+#          git config user.email "github-actions@github.com"
+#
+#      - name: Merge to Development
+#        shell: bash
+#        env:
+#          BRANCH: ${{ github.ref_name }}
+#        run: |
+#          git fetch origin development
+#          git switch development
+#          git merge "$BRANCH"
+#          git push origin HEAD:development
