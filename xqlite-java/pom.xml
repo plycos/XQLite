@@ -4,7 +4,7 @@
 
     <groupId>dev.lycosp</groupId>
     <artifactId>xqlite-java</artifactId>
-    <version>0.1.7</version>
+    <version>0.1.8</version>
     <url>https://github.com/plycos/XQLite</url>
     <scm>
         <url>https://github.com/plycos/XQLite</url>
