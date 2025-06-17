@@ -19,7 +19,7 @@ jobs:
         id: change-type
         shell: bash
         run: |
-          change_type=$(git rev-parse --abbrev-ref HEAD | grep -Pio "\b(major|minor|patch|hotfix)(?=\/)")
+          change_type=$(echo "${{ github.head_ref }}" | grep -Pio "\b(major|minor|patch|hotfix)(?=\/)")
           echo "type=$change_type" >> $GITHUB_OUTPUT
 
       - name: Get Current Version
