@@ -1,0 +1,47 @@
+name: Integrate
+
+on:
+  pull_request:
+
+permissions:
+  contents: write
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout ${{ github.ref }}
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build and Push to XQLite Maven Registry
+        uses: docker/build-push-action@v6
+        with:
+          push: false
+          context: './xqlite-java'
+          file: './xqlite-java/Dockerfile.build'
+          target: 'verify'
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+  integrate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout ${{ github.ref }}
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: '0'
+
+      - name: Merge to Development
+        shell: bash
+        env:
+          BRANCH: ${{ github.ref_name }}
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+          git fetch origin development
+          git switch development
+          git merge "$BRANCH"
+          git push origin HEAD:development
