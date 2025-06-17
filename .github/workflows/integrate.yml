@@ -12,6 +12,36 @@ jobs:
     steps:
       - name: Checkout ${{ github.ref }}
         uses: actions/checkout@v4
+        with:
+          fetch-depth: '0'
+
+      - name: Get Change Type
+        id: change-type
+        shell: bash
+        run: |
+          change_type=$(echo "${{ github.head_ref }}" | grep -Pio "\b(major|minor|patch|hotfix)(?=\/)")
+          echo "type=$change_type" >> $GITHUB_OUTPUT
+
+      - name: Get Current Version
+        id: current-version
+        shell: bash
+        run: |
+          pom="./xqlite-java/pom.xml"
+          current_version=$(python ./xqlite-java/get_version.py $pom)
+          echo "current_version=$current_version" >> $GITHUB_OUTPUT
+
+      - name: Bump Version
+        id: semver
+        shell: bash
+        run: |
+          new_version=$(python ./bump_version.py ${{ steps.current-version.outputs.current_version }} ${{ steps.change-type.outputs.type }})
+          echo "version=$new_version" >> $GITHUB_OUTPUT
+
+      - name: Set Version
+        shell: bash
+        run: |
+          pom="./xqlite-java/pom.xml"
+          python ./xqlite-java/set_version.py $pom ${{ steps.semver.outputs.version }}-SNAPSHOT
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3

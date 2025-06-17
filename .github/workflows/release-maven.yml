@@ -40,6 +40,12 @@ jobs:
           new_version=$(python ./bump_version.py ${{ steps.current-version.outputs.current_version }} ${{ steps.change-type.outputs.type }})
           echo "version=$new_version" >> $GITHUB_OUTPUT
 
+      - name: Set Version
+        shell: bash
+        run: |
+          pom="./xqlite-java/pom.xml"
+          python ./xqlite-java/set_version.py $pom ${{ steps.semver.outputs.version }}
+
       - name: Render settings.xml with GitHub secrets
         shell: bash
         run: |
