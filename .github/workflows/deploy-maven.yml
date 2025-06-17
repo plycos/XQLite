@@ -48,7 +48,7 @@ jobs:
         with:
           push: false
           context: './xqlite-java'
-          file: 'Dockerfile.build'
+          file: './xqlite-java/Dockerfile.build'
           target: 'deploy'
           secret-files: |
             "MAVEN_SETTINGS=./xqlite-java/maven-settings.xml"
