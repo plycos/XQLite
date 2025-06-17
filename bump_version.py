@@ -6,7 +6,7 @@ if len(sys.argv) != 3:
     sys.exit(1)
 
 # Usage: python bump_version.py <current_version> <update_type>
-version = sys.argv[1]
+version = sys.argv[1].replace('-SNAPSHOT', '')
 update_type = sys.argv[2]
 
 try:
