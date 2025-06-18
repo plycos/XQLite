@@ -7,7 +7,7 @@ Compose SQL queries using a fluent, immutable API that abstracts away AST detail
 
 ## Roadmap
 
-- [ ] WHERE clauses w/ basic expressions
+- [X] WHERE clauses w/ basic expressions
 - [ ] JOIN support
 - [ ] Ordering
 - [ ] Pagination
