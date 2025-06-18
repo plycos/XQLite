@@ -8,6 +8,7 @@ import dev.lycosp.xqlite.ast.nodes.expression.*;
 import dev.lycosp.xqlite.ast.nodes.select.SelectNode;
 import dev.lycosp.xqlite.runtime.QuerySpec;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public final class SelectRenderVisitor implements SqlVisitor<QuerySpec> {
@@ -18,19 +19,29 @@ public final class SelectRenderVisitor implements SqlVisitor<QuerySpec> {
 
     @Override
     public QuerySpec visitSelect(SelectNode node) {
-        List<ColumnNode> columns = node.getColumns();
-        StringBuilder columnsSql = new StringBuilder();
-        for (int i = 0; i < columns.size(); i++) {
-            columnsSql.append(visitColumn(columns.get(i)).getSql());
-            if (i < columns.size() - 1) {
-                columnsSql.append(", ");
-            }
-        }
-
+        String columnsSql = VisitorUtils.generateColumnsSql(node.getColumns(), this);
         String fromSql = visitTable(node.getFrom()).getSql();
 
-        String sql = "SELECT " + columnsSql + " FROM " + fromSql;
-        return QuerySpec.of(sql);
+        StringBuilder sqlBuilder = new StringBuilder("SELECT ")
+                .append(columnsSql)
+                .append(" FROM ")
+                .append(fromSql);
+
+        QuerySpec whereSpec = generateWhereClause(node.getWhere());
+        List<Object> params = new ArrayList<>();
+        if (whereSpec != null) {
+            sqlBuilder.append(" WHERE ").append(whereSpec.getSql());
+            params.addAll(whereSpec.getParams());
+        }
+
+        return QuerySpec.of(sqlBuilder.toString(), params);
+    }
+
+    private QuerySpec generateWhereClause(Expression where) {
+        if (where == null) {
+            return null;
+        }
+        return visit(where);
     }
 
     @Override
@@ -51,30 +62,12 @@ public final class SelectRenderVisitor implements SqlVisitor<QuerySpec> {
 
     @Override
     public QuerySpec visitAnd(AndNode node) {
-        List<Expression> expressions = node.getExpressions();
-        StringBuilder sqlBuilder = new StringBuilder("(");
-        for (int i = 0; i < expressions.size(); i++) {
-            sqlBuilder.append(visit(expressions.get(i)).getSql());
-            if (i < expressions.size() - 1) {
-                sqlBuilder.append(" AND ");
-            }
-        }
-        sqlBuilder.append(")");
-        return QuerySpec.of(sqlBuilder.toString());
+        return VisitorUtils.visitCompositeExpressionNode(node.getExpressions(), "AND", this);
     }
 
     @Override
     public QuerySpec visitOr(OrNode node) {
-        List<Expression> expressions = node.getExpressions();
-        StringBuilder sqlBuilder = new StringBuilder("(");
-        for (int i = 0; i < expressions.size(); i++) {
-            sqlBuilder.append(visit(expressions.get(i)).getSql());
-            if (i < expressions.size() - 1) {
-                sqlBuilder.append(" OR ");
-            }
-        }
-        sqlBuilder.append(")");
-        return QuerySpec.of(sqlBuilder.toString());
+        return VisitorUtils.visitCompositeExpressionNode(node.getExpressions(), "OR", this);
     }
 
     @Override
