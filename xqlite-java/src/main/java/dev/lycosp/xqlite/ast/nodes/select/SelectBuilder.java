@@ -4,6 +4,7 @@ import dev.lycosp.xqlite.ast.SqlNode;
 import dev.lycosp.xqlite.ast.nodes.ColumnNode;
 import dev.lycosp.xqlite.ast.nodes.ColumnsNode;
 import dev.lycosp.xqlite.ast.nodes.TableNode;
+import dev.lycosp.xqlite.ast.nodes.expression.Expression;
 
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -49,6 +50,7 @@ public final class SelectBuilder {
         Map<Integer, SqlNode> unsupportedNodes = new LinkedHashMap<>();
         List<ColumnNode> columns = null;
         TableNode from = null;
+        Expression where = null;
 
         for (int i = 0; i < args.length; i++) {
             SqlNode node = args[i];
@@ -56,6 +58,8 @@ public final class SelectBuilder {
                 from = (TableNode) node;
             } else if (node instanceof ColumnsNode) {
                 columns = ((ColumnsNode) node).getColumns();
+            } else if (node instanceof Expression) {
+                where = (Expression) node;
             } else {
                 unsupportedNodes.put(i, node);
             }
@@ -82,6 +86,6 @@ public final class SelectBuilder {
             throw new IllegalArgumentException("Both columns and from must be provided");
         }
 
-        return SelectNode.create(columns, from);
+        return SelectNode.create(columns, from, where);
     }
 }

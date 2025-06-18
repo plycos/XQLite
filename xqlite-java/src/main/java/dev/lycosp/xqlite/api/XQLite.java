@@ -4,8 +4,11 @@ import dev.lycosp.xqlite.ast.SqlNode;
 import dev.lycosp.xqlite.ast.nodes.ColumnNode;
 import dev.lycosp.xqlite.ast.nodes.ColumnsNode;
 import dev.lycosp.xqlite.ast.nodes.TableNode;
+import dev.lycosp.xqlite.ast.nodes.expression.*;
 import dev.lycosp.xqlite.ast.nodes.select.SelectBuilder;
 import dev.lycosp.xqlite.ast.nodes.select.SelectNode;
+
+import java.util.List;
 
 /**
  * Utility class providing static factory and delegation methods for constructing
@@ -154,5 +157,178 @@ public final class XQLite {
      */
     public static TableNode from(String name, String alias) {
         return TableNode.from(name, alias);
+    }
+
+
+    // --- Expression: Where ---
+
+    /**
+     * Delegates to {@link Expression#where(Expression)}.
+     *
+     * @see Expression#where(Expression)
+     */
+    public static Expression where(Expression node) {
+        return Expression.where(node);
+    }
+
+
+    // --- Expression: AndNode ---
+
+    /**
+     * Delegates to {@link AndNode#and(Expression...)}.
+     *
+     * @see AndNode#and(Expression...)
+     */
+    public static AndNode and(Expression... nodes) {
+        return AndNode.and(nodes);
+    }
+
+    /**
+     * Delegates to {@link AndNode#and(List)}.
+     *
+     * @see AndNode#and(List)
+     */
+    public static AndNode and(List<Expression> nodes) {
+        return AndNode.and(nodes);
+    }
+
+    // --- Expression: OrNode ---
+
+    /**
+     * Delegates to {@link OrNode#or(Expression...)}.
+     *
+     * @see OrNode#or(Expression...)
+     */
+    public static OrNode or(Expression... nodes) {
+        return OrNode.or(nodes);
+    }
+
+    /**
+     * Delegates to {@link OrNode#or(List)}.
+     *
+     * @see OrNode#or(List)
+     */
+    public static OrNode or(List<Expression> nodes) {
+        return OrNode.or(nodes);
+    }
+
+    // --- Expression: EqNode ---
+
+    /**
+     * Delegates to {@link EqNode#eq(ColumnNode, Object)}.
+     *
+     * @see EqNode#eq(ColumnNode, Object)
+     */
+    public static EqNode eq(ColumnNode column, Object value) {
+        return EqNode.eq(column, value);
+    }
+
+    /**
+     * Delegates to {@link EqNode#eq(String, Object)}.
+     *
+     * @see EqNode#eq(String, Object)
+     */
+    public static EqNode eq(String column, Object value) {
+        return EqNode.eq(column, value);
+    }
+
+    // --- Expression: LtNode ---
+
+    /**
+     * Delegates to {@link LtNode#lt(ColumnNode, Object)}.
+     *
+     * @see LtNode#lt(ColumnNode, Object)
+     */
+    public static LtNode lt(ColumnNode column, Object value) {
+        return LtNode.lt(column, value);
+    }
+
+    /**
+     * Delegates to {@link LtNode#lt(String, Object)}.
+     *
+     * @see LtNode#lt(String, Object)
+     */
+    public static LtNode lt(String column, Object value) {
+        return LtNode.lt(column, value);
+    }
+
+    // --- Expression: GtNode ---
+
+    /**
+     * Delegates to {@link GtNode#gt(ColumnNode, Object)}.
+     *
+     * @see GtNode#gt(ColumnNode, Object)
+     */
+    public static GtNode gt(ColumnNode column, Object value) {
+        return GtNode.gt(column, value);
+    }
+
+    /**
+     * Delegates to {@link GtNode#gt(String, Object)}.
+     *
+     * @see GtNode#gt(String, Object)
+     */
+    public static GtNode gt(String column, Object value) {
+        return GtNode.gt(column, value);
+    }
+
+    // --- Expression: LeNode ---
+
+    /**
+     * Delegates to {@link LeNode#le(ColumnNode, Object)}.
+     *
+     * @see LeNode#le(ColumnNode, Object)
+     */
+    public static LeNode le(ColumnNode column, Object value) {
+        return LeNode.le(column, value);
+    }
+
+    /**
+     * Delegates to {@link LeNode#le(String, Object)}.
+     *
+     * @see LeNode#le(String, Object)
+     */
+    public static LeNode le(String column, Object value) {
+        return LeNode.le(column, value);
+    }
+
+    // --- Expression: GeNode ---
+
+    /**
+     * Delegates to {@link GeNode#ge(ColumnNode, Object)}.
+     *
+     * @see GeNode#ge(ColumnNode, Object)
+     */
+    public static GeNode ge(ColumnNode column, Object value) {
+        return GeNode.ge(column, value);
+    }
+
+    /**
+     * Delegates to {@link GeNode#ge(String, Object)}.
+     *
+     * @see GeNode#ge(String, Object)
+     */
+    public static GeNode ge(String column, Object value) {
+        return GeNode.ge(column, value);
+    }
+
+    // --- Expression: NeNode ---
+
+    /**
+     * Delegates to {@link NeNode#ne(ColumnNode, Object)}.
+     *
+     * @see NeNode#ne(ColumnNode, Object)
+     */
+    public static NeNode ne(ColumnNode column, Object value) {
+        return NeNode.ne(column, value);
+    }
+
+    /**
+     * Delegates to {@link NeNode#ne(String, Object)}.
+     *
+     * @see NeNode#ne(String, Object)
+     */
+    public static NeNode ne(String column, Object value) {
+        return NeNode.ne(column, value);
     }
 }

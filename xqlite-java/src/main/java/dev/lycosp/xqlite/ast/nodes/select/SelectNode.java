@@ -4,6 +4,7 @@ import dev.lycosp.xqlite.ast.SqlNode;
 import dev.lycosp.xqlite.ast.SqlVisitor;
 import dev.lycosp.xqlite.ast.nodes.ColumnNode;
 import dev.lycosp.xqlite.ast.nodes.TableNode;
+import dev.lycosp.xqlite.ast.nodes.expression.Expression;
 
 import java.util.List;
 import java.util.Objects;
@@ -11,14 +12,16 @@ import java.util.Objects;
 public final class SelectNode implements SqlNode {
     private final List<ColumnNode> columns;
     private final TableNode from;
+    private final Expression where;
 
-    static SelectNode create(List<ColumnNode> columns, TableNode from) {
-        return new SelectNode(columns, from);
+    static SelectNode create(List<ColumnNode> columns, TableNode from, Expression where) {
+        return new SelectNode(columns, from, where);
     }
 
-    private SelectNode(List<ColumnNode> columns, TableNode from) {
+    private SelectNode(List<ColumnNode> columns, TableNode from, Expression where) {
         this.columns = Objects.requireNonNull(columns, "Columns must not be null");
         this.from = Objects.requireNonNull(from, "From must not be null");
+        this.where = where;
     }
 
     public List<ColumnNode> getColumns() {
@@ -27,6 +30,10 @@ public final class SelectNode implements SqlNode {
 
     public TableNode getFrom() {
         return from;
+    }
+
+    public Expression getWhere() {
+        return where;
     }
 
     @Override
