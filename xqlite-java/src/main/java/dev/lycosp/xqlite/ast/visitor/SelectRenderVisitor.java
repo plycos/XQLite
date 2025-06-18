@@ -51,42 +51,71 @@ public final class SelectRenderVisitor implements SqlVisitor<QuerySpec> {
 
     @Override
     public QuerySpec visitAnd(AndNode node) {
-        return null;
+        List<Expression> expressions = node.getExpressions();
+        StringBuilder sqlBuilder = new StringBuilder("(");
+        for (int i = 0; i < expressions.size(); i++) {
+            sqlBuilder.append(visit(expressions.get(i)).getSql());
+            if (i < expressions.size() - 1) {
+                sqlBuilder.append(" AND ");
+            }
+        }
+        sqlBuilder.append(")");
+        return QuerySpec.of(sqlBuilder.toString());
     }
 
     @Override
     public QuerySpec visitOr(OrNode node) {
-        return null;
+        List<Expression> expressions = node.getExpressions();
+        StringBuilder sqlBuilder = new StringBuilder("(");
+        for (int i = 0; i < expressions.size(); i++) {
+            sqlBuilder.append(visit(expressions.get(i)).getSql());
+            if (i < expressions.size() - 1) {
+                sqlBuilder.append(" OR ");
+            }
+        }
+        sqlBuilder.append(")");
+        return QuerySpec.of(sqlBuilder.toString());
     }
 
     @Override
     public QuerySpec visitEq(EqNode node) {
-        String sql = node.
-        return null;
+        String column = visitColumn(node.getColumn()).getSql();
+        String sql = column + " = ?";
+        return QuerySpec.of(sql, node.getValue());
     }
 
     @Override
     public QuerySpec visitLt(LtNode node) {
-        return null;
+        String column = visitColumn(node.getColumn()).getSql();
+        String sql = column + " < ?";
+        return QuerySpec.of(sql, node.getValue());
     }
 
     @Override
     public QuerySpec visitGt(GtNode node) {
-        return null;
+        String column = visitColumn(node.getColumn()).getSql();
+        String sql = column + " > ?";
+        return QuerySpec.of(sql, node.getValue());
     }
 
     @Override
     public QuerySpec visitLe(LeNode node) {
-        return null;
+        String column = visitColumn(node.getColumn()).getSql();
+        String sql = column + " <= ?";
+        return QuerySpec.of(sql, node.getValue());
     }
 
     @Override
     public QuerySpec visitGe(GeNode node) {
-        return null;
+        String column = visitColumn(node.getColumn()).getSql();
+        String sql = column + " >= ?";
+        return QuerySpec.of(sql, node.getValue());
     }
 
     @Override
     public QuerySpec visitNe(NeNode node) {
-        return null;
+        String column = visitColumn(node.getColumn()).getSql();
+        String sql = column + " <> ?";
+        return QuerySpec.of(sql, node.getValue());
     }
 }

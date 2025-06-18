@@ -5,7 +5,7 @@ import dev.lycosp.xqlite.ast.nodes.ColumnNode;
 
 import java.util.Objects;
 
-public class GtNode extends ComparisonExpression {
+public final class GtNode extends ComparisonExpression {
     public static GtNode gt(ColumnNode column, Object value) {
         return new GtNode(column, value);
     }

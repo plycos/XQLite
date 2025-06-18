@@ -2,13 +2,15 @@ package dev.lycosp.xqlite.ast.nodes.expression;
 
 import dev.lycosp.xqlite.ast.nodes.ColumnNode;
 
-public abstract class ComparisonExpression implements Expression {
+import java.util.Objects;
+
+abstract class ComparisonExpression implements Expression {
     private final ColumnNode column;
     private final Object value;
 
-    protected ComparisonExpression(ColumnNode column, Object value) {
+    ComparisonExpression(ColumnNode column, Object value) {
         this.column = column;
-        this.value = value;
+        this.value = Objects.requireNonNull(value, "Comparison value must not be null");
     }
 
     public ColumnNode getColumn() {

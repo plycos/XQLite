@@ -6,7 +6,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
-public class AndNode extends CompositeExpression {
+public final class AndNode extends CompositeExpression {
     public static AndNode and(Expression... children) {
         return new AndNode(Arrays.asList(children));
     }

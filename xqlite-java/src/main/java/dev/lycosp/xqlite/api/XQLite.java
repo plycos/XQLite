@@ -160,6 +160,18 @@ public final class XQLite {
     }
 
 
+    // --- Expression: Where ---
+
+    /**
+     * Delegates to {@link Expression#where(Expression)}.
+     *
+     * @see Expression#where(Expression)
+     */
+    public static Expression where(Expression node) {
+        return Expression.where(node);
+    }
+
+
     // --- Expression: AndNode ---
 
     /**

@@ -5,7 +5,7 @@ import dev.lycosp.xqlite.ast.nodes.ColumnNode;
 
 import java.util.Objects;
 
-public class GeNode extends ComparisonExpression {
+public final class GeNode extends ComparisonExpression {
     public static GeNode ge(ColumnNode column, Object value) {
         return new GeNode(column, value);
     }

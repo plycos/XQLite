@@ -6,7 +6,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
-public class OrNode extends CompositeExpression {
+public final class OrNode extends CompositeExpression {
     public static OrNode or(Expression... expressions) {
         return new OrNode(Arrays.asList(expressions));
     }

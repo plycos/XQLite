@@ -5,7 +5,7 @@ import dev.lycosp.xqlite.ast.nodes.ColumnNode;
 
 import java.util.Objects;
 
-public class LeNode extends ComparisonExpression {
+public final class LeNode extends ComparisonExpression {
     public static LeNode le(ColumnNode column, Object value) {
         return new LeNode(column, value);
     }
