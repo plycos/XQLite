@@ -8,6 +8,9 @@
 - Support for `WHERE` clauses in SELECT queries.
 - Added `Expression.emptyExpression()` for cases where no `WHERE` clause is needed. This can be used to explicitly define an empty condition when dynamically generating queries. Alternatively, if no `WHERE` clause is required, it can simply be omitted.
 
+### Removed
+- `Main.java` that existed for testing purposes.
+
 ### Example
 ```java
 import dev.lycosp.xqlite.api.SelectQuery;
