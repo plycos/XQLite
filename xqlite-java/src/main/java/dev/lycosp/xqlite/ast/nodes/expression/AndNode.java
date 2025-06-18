@@ -4,6 +4,7 @@ import dev.lycosp.xqlite.ast.SqlVisitor;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 public class AndNode extends CompositeExpression {
     public static AndNode and(Expression... children) {
@@ -21,5 +22,25 @@ public class AndNode extends CompositeExpression {
     @Override
     public <R> R accept(SqlVisitor<R> visitor) {
         return visitor.visitAnd(this);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+        AndNode andNode = (AndNode) obj;
+        return getExpressions().equals(andNode.getExpressions());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getExpressions());
+    }
+
+    @Override
+    public String toString() {
+        return "AndNode{" +
+                "expressions=" + getExpressions() +
+                '}';
     }
 }

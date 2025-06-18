@@ -61,6 +61,7 @@ public final class SelectRenderVisitor implements SqlVisitor<QuerySpec> {
 
     @Override
     public QuerySpec visitEq(EqNode node) {
+        String sql = node.
         return null;
     }
 
