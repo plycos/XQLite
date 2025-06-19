@@ -88,4 +88,8 @@ jobs:
       - name: Push Commit
         if: success()
         shell: bash
-        run: git push origin HEAD:master --force
+        run: |
+          tag_name="v${{ steps.semver.outputs.version }}"
+          git tag "$tag_name"
+          git push origin "$tag_name"
+          git push origin HEAD:master --force

@@ -5,6 +5,8 @@ import dev.lycosp.xqlite.ast.SqlVisitor;
 import dev.lycosp.xqlite.ast.nodes.ColumnNode;
 import dev.lycosp.xqlite.ast.nodes.TableNode;
 import dev.lycosp.xqlite.ast.nodes.expression.*;
+import dev.lycosp.xqlite.ast.nodes.orderby.OrderByNode;
+import dev.lycosp.xqlite.ast.nodes.orderby.OrderByNodes;
 import dev.lycosp.xqlite.ast.nodes.select.SelectNode;
 import dev.lycosp.xqlite.runtime.QuerySpec;
 
@@ -27,21 +29,19 @@ public final class SelectRenderVisitor implements SqlVisitor<QuerySpec> {
                 .append(" FROM ")
                 .append(fromSql);
 
-        QuerySpec whereSpec = generateWhereClause(node.getWhere());
         List<Object> params = new ArrayList<>();
+        QuerySpec whereSpec = visit(node.getWhere());
         if (whereSpec != null) {
             sqlBuilder.append(" WHERE ").append(whereSpec.getSql());
             params.addAll(whereSpec.getParams());
         }
 
-        return QuerySpec.of(sqlBuilder.toString(), params);
-    }
-
-    private QuerySpec generateWhereClause(Expression where) {
-        if (where == null) {
-            return null;
+        if (!node.getOrderBy().isEmpty()) {
+            QuerySpec orderBySpec = visit(node.getOrderBy());
+            sqlBuilder.append(" ORDER BY ").append(orderBySpec.getSql());
         }
-        return visit(where);
+
+        return QuerySpec.of(sqlBuilder.toString(), params);
     }
 
     @Override
@@ -110,5 +110,26 @@ public final class SelectRenderVisitor implements SqlVisitor<QuerySpec> {
         String column = visitColumn(node.getColumn()).getSql();
         String sql = column + " <> ?";
         return QuerySpec.of(sql, node.getValue());
+    }
+
+    @Override
+    public QuerySpec visitOrderBys(OrderByNodes node) {
+        List<OrderByNode> orderByList = node.getNodes();
+        StringBuilder orderBySql = new StringBuilder();
+        for (int i = 0; i < orderByList.size(); i++) {
+            OrderByNode orderByNode = orderByList.get(i);
+            QuerySpec orderBy = visit(orderByNode);
+            orderBySql.append(orderBy.getSql());
+            if (i < orderByList.size() - 1) {
+                orderBySql.append(", ");
+            }
+        }
+        return QuerySpec.of(orderBySql.toString());
+    }
+
+    @Override
+    public QuerySpec visitOrderBy(OrderByNode node) {
+        String column = visitColumn(node.getColumn()).getSql();
+        return QuerySpec.of(column + " " + node.getDirection());
     }
 }

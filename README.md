@@ -8,8 +8,8 @@ Compose SQL queries using a fluent, immutable API that abstracts away AST detail
 ## Roadmap
 
 - [X] WHERE clauses w/ basic expressions
+- [X] Order By
 - [ ] JOIN support
-- [ ] Ordering
 - [ ] Pagination
 - [ ] Advanced expressions and function support
 - [ ] Comprehensive test coverage
