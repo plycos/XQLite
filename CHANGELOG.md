@@ -7,6 +7,9 @@
 ### Changed
 - Improved SQL rendering and parameterization.
 
+### Upcoming
+- Refactor internal Expression logic to reduce number of visitor methods.
+
 ### Example
 ```java
 import dev.lycosp.xqlite.api.SelectQuery;
