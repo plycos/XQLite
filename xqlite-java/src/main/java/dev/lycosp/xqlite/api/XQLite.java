@@ -5,6 +5,10 @@ import dev.lycosp.xqlite.ast.nodes.ColumnNode;
 import dev.lycosp.xqlite.ast.nodes.ColumnsNode;
 import dev.lycosp.xqlite.ast.nodes.TableNode;
 import dev.lycosp.xqlite.ast.nodes.expression.*;
+import dev.lycosp.xqlite.ast.nodes.orderby.AscNode;
+import dev.lycosp.xqlite.ast.nodes.orderby.DescNode;
+import dev.lycosp.xqlite.ast.nodes.orderby.OrderByNode;
+import dev.lycosp.xqlite.ast.nodes.orderby.OrderByNodes;
 import dev.lycosp.xqlite.ast.nodes.select.SelectBuilder;
 import dev.lycosp.xqlite.ast.nodes.select.SelectNode;
 
@@ -330,5 +334,64 @@ public final class XQLite {
      */
     public static NeNode ne(String column, Object value) {
         return NeNode.ne(column, value);
+    }
+
+
+    // --- OrderByNodes ---
+
+    /**
+     * Delegates to {@link OrderByNodes#orderBy(OrderByNode...)}.
+     *
+     * @see OrderByNodes#orderBy(OrderByNode...)
+     */
+    public static OrderByNodes orderBy(OrderByNode... nodes) {
+        return OrderByNodes.orderBy(nodes);
+    }
+
+    /**
+     * Delegates to {@link OrderByNodes#orderBy(List)}.
+     *
+     * @see OrderByNodes#orderBy(List)
+     */
+    public static OrderByNodes orderBy(List<OrderByNode> nodes) {
+        return OrderByNodes.orderBy(nodes);
+    }
+
+    // --- OrderByNode ---
+
+    /**
+     * Delegates to {@link AscNode#asc(String)}.
+     *
+     * @see AscNode#asc(String)
+     */
+    public static AscNode asc(String column) {
+        return AscNode.asc(column);
+    }
+
+    /**
+     * Delegates to {@link AscNode#asc(ColumnNode)}.
+     *
+     * @see AscNode#asc(ColumnNode)
+     */
+    public static AscNode asc(ColumnNode column) {
+        return AscNode.asc(column);
+    }
+
+    /**
+     * Delegates to {@link DescNode#desc(String)}.
+     *
+     * @see DescNode#desc(String)
+     */
+    public static DescNode desc(String column) {
+        return DescNode.desc(column);
+    }
+
+    /**
+     * Delegates to {@link DescNode#desc(ColumnNode)}.
+     *
+     * @see DescNode#desc(ColumnNode)
+     */
+    public static DescNode desc(ColumnNode column) {
+        return DescNode.desc(column);
     }
 }

@@ -3,6 +3,8 @@ package dev.lycosp.xqlite.ast;
 import dev.lycosp.xqlite.ast.nodes.ColumnNode;
 import dev.lycosp.xqlite.ast.nodes.TableNode;
 import dev.lycosp.xqlite.ast.nodes.expression.*;
+import dev.lycosp.xqlite.ast.nodes.orderby.OrderByNode;
+import dev.lycosp.xqlite.ast.nodes.orderby.OrderByNodes;
 import dev.lycosp.xqlite.ast.nodes.select.SelectNode;
 
 public interface SqlVisitor<R> {
@@ -29,4 +31,8 @@ public interface SqlVisitor<R> {
     R visitGe(GeNode node);
 
     R visitNe(NeNode node);
+
+    R visitOrderBys(OrderByNodes node);
+
+    R visitOrderBy(OrderByNode node);
 }

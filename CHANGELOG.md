@@ -1,4 +1,10 @@
 # Changelog
+## [patch/update-readme] - Readme Update (v0.2.1)
+
+### Added
+- Marked WHERE clauses w/ basic expressions as complete on roadmap
+
+---
 
 ## [minor/expressions] - Feature Release (v0.2.0)
 
