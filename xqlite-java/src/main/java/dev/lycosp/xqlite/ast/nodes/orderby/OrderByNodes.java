@@ -28,7 +28,7 @@ public final class OrderByNodes implements SqlNode {
     }
 
     public boolean isEmpty() {
-        return OrderBy.emptyOrderBy().equals(nodes.get(0));
+        return nodes.isEmpty();
     }
 
     @Override

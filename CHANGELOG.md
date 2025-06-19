@@ -1,4 +1,65 @@
 # Changelog
+
+## [minor/orderby] - Feature Release (v0.3.0)
+### Added
+- Support for `ORDER BY` clauses in query building.
+
+### Changed
+- Improved SQL rendering and parameterization.
+
+### Example
+```java
+import dev.lycosp.xqlite.api.SelectQuery;
+import dev.lycosp.xqlite.ast.nodes.expression.AndNode;
+import dev.lycosp.xqlite.ast.nodes.expression.Expression;
+import dev.lycosp.xqlite.ast.nodes.orderby.OrderBy;
+import dev.lycosp.xqlite.ast.nodes.orderby.OrderByNode;
+import dev.lycosp.xqlite.runtime.QuerySpec;
+
+import java.util.Collections;
+import java.util.List;
+
+import static dev.lycosp.xqlite.api.XQLite.*;
+
+public class Main {
+    public static void main(String[] args) {
+        List<Expression> whereExpressions1 = Collections.singletonList(eq("status", "active"));
+        List<OrderByNode> orderByNodes1 = Collections.singletonList(asc("name"));
+        System.out.println(generateDynamicQuery(whereExpressions1, orderByNodes1));
+        // Output: SELECT id, name, age, status FROM users WHERE status = ? ORDER BY name ASC;
+
+        List<Expression> whereExpressions2 = Collections.emptyList();
+        List<OrderByNode> orderByNodes2 = Collections.emptyList();
+        System.out.println(generateDynamicQuery(whereExpressions2, orderByNodes2));
+        // Output: SELECT id, name, age, status FROM users;
+    }
+
+    public static QuerySpec generateDynamicQuery(List<Expression> whereExpressions, List<OrderByNode> orderBys) {
+        // Generate WHERE clause
+        Expression whereClause = whereExpressions.isEmpty()
+                ? Expression.emptyExpression()
+                : AndNode.and(whereExpressions);
+
+        // Generate ORDER BY clause
+        List<OrderByNode> orderByClause = orderBys.isEmpty()
+                ? OrderBy.emptyOrderBy()
+                : orderBys;
+
+        // Build the query
+        SelectQuery selectQuery = select(
+                cols("id", "name", "age", "status"),
+                from("users"),
+                where(whereClause),
+                orderBy(orderByClause)
+        );
+
+        return selectQuery.render().toSql();
+    }
+}
+```
+
+---
+
 ## [patch/update-readme] - Readme Update (v0.2.1)
 
 ### Added

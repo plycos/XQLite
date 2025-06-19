@@ -5,7 +5,6 @@ import dev.lycosp.xqlite.ast.SqlVisitor;
 import dev.lycosp.xqlite.ast.nodes.ColumnNode;
 import dev.lycosp.xqlite.ast.nodes.TableNode;
 import dev.lycosp.xqlite.ast.nodes.expression.*;
-import dev.lycosp.xqlite.ast.nodes.orderby.OrderBy;
 import dev.lycosp.xqlite.ast.nodes.orderby.OrderByNode;
 import dev.lycosp.xqlite.ast.nodes.orderby.OrderByNodes;
 import dev.lycosp.xqlite.ast.nodes.select.SelectNode;
@@ -30,8 +29,8 @@ public final class SelectRenderVisitor implements SqlVisitor<QuerySpec> {
                 .append(" FROM ")
                 .append(fromSql);
 
-        QuerySpec whereSpec = generateWhereClause(node.getWhere());
         List<Object> params = new ArrayList<>();
+        QuerySpec whereSpec = visit(node.getWhere());
         if (whereSpec != null) {
             sqlBuilder.append(" WHERE ").append(whereSpec.getSql());
             params.addAll(whereSpec.getParams());
@@ -43,13 +42,6 @@ public final class SelectRenderVisitor implements SqlVisitor<QuerySpec> {
         }
 
         return QuerySpec.of(sqlBuilder.toString(), params);
-    }
-
-    private QuerySpec generateWhereClause(Expression where) {
-        if (where == null) {
-            return null;
-        }
-        return visit(where);
     }
 
     @Override
