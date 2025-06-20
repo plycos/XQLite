@@ -44,12 +44,12 @@ public class Main {
         List<Expression> whereExpressions1 = Collections.singletonList(eq("status", "active"));
         List<OrderByNode> orderByNodes1 = Collections.singletonList(asc("name"));
         System.out.println(generateDynamicQuery(whereExpressions1, orderByNodes1));
-        // Output: SELECT id, name, age, status FROM users WHERE status = ? ORDER BY name ASC;
+        // Output: QuerySpec{sql='SELECT id, name, age, status FROM users WHERE (status = ?) ORDER BY name ASC', params=[active]}
 
         List<Expression> whereExpressions2 = Collections.emptyList();
         List<OrderByNode> orderByNodes2 = Collections.emptyList();
         System.out.println(generateDynamicQuery(whereExpressions2, orderByNodes2));
-        // Output: SELECT id, name, age, status FROM users;
+        // Output: QuerySpec{sql='SELECT id, name, age, status FROM users', params=[]}
     }
 
     public static QuerySpec generateDynamicQuery(List<Expression> whereExpressions, List<OrderByNode> orderBys) {
@@ -71,7 +71,7 @@ public class Main {
                 orderBy(orderByClause)
         );
 
-        return selectQuery.render().toSql();
+        return selectQuery.render();
     }
 }
 ```

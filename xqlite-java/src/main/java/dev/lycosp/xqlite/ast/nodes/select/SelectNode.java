@@ -2,32 +2,31 @@ package dev.lycosp.xqlite.ast.nodes.select;
 
 import dev.lycosp.xqlite.ast.SqlNode;
 import dev.lycosp.xqlite.ast.SqlVisitor;
-import dev.lycosp.xqlite.ast.nodes.ColumnNode;
+import dev.lycosp.xqlite.ast.nodes.ColumnsNode;
 import dev.lycosp.xqlite.ast.nodes.TableNode;
 import dev.lycosp.xqlite.ast.nodes.expression.Expression;
 import dev.lycosp.xqlite.ast.nodes.orderby.OrderByNodes;
 
-import java.util.List;
 import java.util.Objects;
 
 public final class SelectNode implements SqlNode {
-    private final List<ColumnNode> columns;
+    private final ColumnsNode columns;
     private final TableNode from;
     private final Expression where;
     private final OrderByNodes orderBy;
 
-    static SelectNode create(List<ColumnNode> columns, TableNode from, Expression where, OrderByNodes orderBy) {
+    static SelectNode create(ColumnsNode columns, TableNode from, Expression where, OrderByNodes orderBy) {
         return new SelectNode(columns, from, where, orderBy);
     }
 
-    private SelectNode(List<ColumnNode> columns, TableNode from, Expression where, OrderByNodes orderBy) {
+    private SelectNode(ColumnsNode columns, TableNode from, Expression where, OrderByNodes orderBy) {
         this.columns = Objects.requireNonNull(columns, "Columns must not be null");
         this.from = Objects.requireNonNull(from, "From must not be null");
         this.where = where;
         this.orderBy = orderBy;
     }
 
-    public List<ColumnNode> getColumns() {
+    public ColumnsNode getColumns() {
         return columns;
     }
 
