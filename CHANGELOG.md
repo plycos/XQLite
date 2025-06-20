@@ -1,5 +1,13 @@
 # Changelog
 
+## [patch/fix-columnnodes] - Refactor of ColumnsNode (v0.3.1)
+### Changed
+- Added `visitColumns` method to `SqlVisitor` to handle `ColumnsNode`.
+- Moved logic to render `ColumnsNode` from `VisitorUtils` to `SelectRenderVisitor`.
+
+### Removed
+- Removed `generateColumnsSql` method from `VisitorUtils`.
+
 ## [minor/orderby] - Feature Release (v0.3.0)
 ### Added
 - Support for `ORDER BY` clauses in query building.
