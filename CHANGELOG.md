@@ -9,6 +9,8 @@
 ### Removed
 - Removed `generateColumnsSql` method from `VisitorUtils`.
 
+---
+
 ## [minor/orderby] - Feature Release (v0.3.0)
 ### Added
 - Support for `ORDER BY` clauses in query building.
