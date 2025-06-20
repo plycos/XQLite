@@ -4,6 +4,7 @@
 ### Changed
 - Added `visitColumns` method to `SqlVisitor` to handle `ColumnsNode`.
 - Moved logic to render `ColumnsNode` from `VisitorUtils` to `SelectRenderVisitor`.
+- Changed `List<ColumnNodes>` types to `ColumnsNode` in `SelectNode` and `SelectBuilder`.
 
 ### Removed
 - Removed `generateColumnsSql` method from `VisitorUtils`.
