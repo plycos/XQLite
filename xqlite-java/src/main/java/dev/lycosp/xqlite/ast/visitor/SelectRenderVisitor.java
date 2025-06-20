@@ -3,6 +3,7 @@ package dev.lycosp.xqlite.ast.visitor;
 import dev.lycosp.xqlite.ast.SqlNode;
 import dev.lycosp.xqlite.ast.SqlVisitor;
 import dev.lycosp.xqlite.ast.nodes.ColumnNode;
+import dev.lycosp.xqlite.ast.nodes.ColumnsNode;
 import dev.lycosp.xqlite.ast.nodes.TableNode;
 import dev.lycosp.xqlite.ast.nodes.expression.*;
 import dev.lycosp.xqlite.ast.nodes.orderby.OrderByNode;
@@ -21,7 +22,7 @@ public final class SelectRenderVisitor implements SqlVisitor<QuerySpec> {
 
     @Override
     public QuerySpec visitSelect(SelectNode node) {
-        String columnsSql = VisitorUtils.generateColumnsSql(node.getColumns(), this);
+        String columnsSql = visitColumns(node.getColumns()).getSql();
         String fromSql = visitTable(node.getFrom()).getSql();
 
         StringBuilder sqlBuilder = new StringBuilder("SELECT ")
@@ -42,6 +43,19 @@ public final class SelectRenderVisitor implements SqlVisitor<QuerySpec> {
         }
 
         return QuerySpec.of(sqlBuilder.toString(), params);
+    }
+
+    @Override
+    public QuerySpec visitColumns(ColumnsNode node) {
+        List<ColumnNode> columns = node.getColumns();
+        StringBuilder columnsSql = new StringBuilder();
+        for (int i = 0; i < columns.size(); i++) {
+            columnsSql.append(visitColumn(columns.get(i)).getSql());
+            if (i < columns.size() - 1) {
+                columnsSql.append(", ");
+            }
+        }
+        return QuerySpec.of(columnsSql.toString());
     }
 
     @Override

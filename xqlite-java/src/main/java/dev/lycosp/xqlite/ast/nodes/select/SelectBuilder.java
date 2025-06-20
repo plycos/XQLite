@@ -1,14 +1,12 @@
 package dev.lycosp.xqlite.ast.nodes.select;
 
 import dev.lycosp.xqlite.ast.SqlNode;
-import dev.lycosp.xqlite.ast.nodes.ColumnNode;
 import dev.lycosp.xqlite.ast.nodes.ColumnsNode;
 import dev.lycosp.xqlite.ast.nodes.TableNode;
 import dev.lycosp.xqlite.ast.nodes.expression.Expression;
 import dev.lycosp.xqlite.ast.nodes.orderby.OrderByNodes;
 
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -49,7 +47,7 @@ public final class SelectBuilder {
      */
     public static SelectNode select(SqlNode... args) {
         Map<Integer, SqlNode> unsupportedNodes = new LinkedHashMap<>();
-        List<ColumnNode> columns = null;
+        ColumnsNode columns = null;
         TableNode from = null;
         Expression where = null;
         OrderByNodes orderBy = null;
@@ -59,7 +57,7 @@ public final class SelectBuilder {
             if (node instanceof TableNode) {
                 from = (TableNode) node;
             } else if (node instanceof ColumnsNode) {
-                columns = ((ColumnsNode) node).getColumns();
+                columns = (ColumnsNode) node;
             } else if (node instanceof Expression) {
                 where = (Expression) node;
             } else if (node instanceof OrderByNodes) {
